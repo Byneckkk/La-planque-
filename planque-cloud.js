@@ -44,6 +44,8 @@
     $('#authPassRow').hidden = mode === 'forgot';
     $('#authPass2Row').hidden = !(mode === 'signup' || mode === 'reset');
     $('#authRemRow').hidden = !(mode === 'login' || mode === 'signup');
+    const inv = $('#authInviteRow'); if (inv) inv.hidden = !(mode === 'signup' && maint.invite_required);
+    if (mode === 'signup' && maint.signups_open === false && !msg) { $('#authMsg').innerHTML = 'Les inscriptions sont fermées pour le moment. Demande à l\'admin de la Planque.'; $('#authMsg').hidden = false }
     $('#authPass').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
     $('#authGo').textContent = { login: 'Se connecter', signup: 'Créer mon compte', forgot: 'Recevoir le lien', reset: 'Enregistrer' }[mode] || 'OK';
     $('#authLinks').innerHTML =
@@ -65,6 +67,7 @@
     if (/Signups not allowed|signup.*disabled/i.test(m)) return 'Les inscriptions sont fermées : demande à l\'admin de la Planque.';
     if (/valid email|invalid.*email/i.test(m)) return 'Cette adresse e-mail n\'est pas valide.';
     if (/fetch|network/i.test(m)) return 'Pas de connexion au serveur. Vérifie ton internet.';
+    if (/Database error saving new user|PLANQUE_/i.test(m)) return 'Inscription refusée : code d\'invitation incorrect ou inscriptions fermées. Demande à l\'admin.';
     return 'Ça n\'a pas marché : ' + m;
   };
 
@@ -83,7 +86,13 @@
         if (mode === 'login') {
           const { error } = await sb.auth.signInWithPassword({ email, password: pass }); if (error) throw error;
         } else if (mode === 'signup') {
-          const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: location.origin + location.pathname } }); if (error) throw error;
+          const invite = ($('#authInvite')?.value || '').trim().toUpperCase();
+          try {
+            const { data: chk, error: ce } = await sb.rpc('planque_signup_check', { code: invite });
+            if (!ce && chk === 'closed') { say('Les inscriptions sont fermées pour le moment. Demande à l\'admin de la Planque.'); return }
+            if (!ce && chk === 'bad_code') { say(invite ? 'Ce code d\'invitation n\'est pas bon. Demande le bon code à l\'admin.' : 'Il faut un code d\'invitation pour créer un compte. Demande-le à l\'admin.'); $('#authInviteRow').hidden = false; $('#authInvite').focus(); return }
+          } catch {}
+          const { data, error } = await sb.auth.signUp({ email, password: pass, options: { emailRedirectTo: location.origin + location.pathname, data: { invite } } }); if (error) throw error;
           if (!data.session) gate('check', 'Ton compte est créé ! On t\'a envoyé un e-mail à <b>' + esc(email) + '</b> : clique sur le lien dedans pour l\'activer, puis reviens te connecter. (Regarde aussi dans les spams.)');
         } else if (mode === 'forgot') {
           const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.origin + location.pathname }); if (error) throw error;
@@ -105,8 +114,10 @@
     starting = true;
     try {
       if (skipRead !== true) await readMaint();
+      if (await amBanned()) { hideGate(); showBanned(); return }
       if (maint.maintenance && !(await amAdmin())) { hideGate(); showMaint(); return }
       started = true; hideGate(); hideMaint(); resolveReady();
+      loadAdmins();
       const out = $('#logoutBox'); if (out) { out.hidden = false; $('#logoutMail').textContent = session.user.email || '' }
       if (await amAdmin()) setupMaintBox();
       banner();
@@ -117,15 +128,42 @@
   const MAINT_DEF = 'La Planque fait une petite mise à jour. Reviens dans quelques minutes !';
   let maint = { maintenance: false, message: '' }, maintReady = false, adminP2 = null;
   const amAdmin = () => session ? (adminP2 || (adminP2 = sb.rpc('planque_is_admin').then(r => !!r.data).catch(() => false))) : Promise.resolve(false);
+  const setCbs = new Set();
+  const emitSettings = () => setCbs.forEach(f => { try { f(maint) } catch (e) { console.error(e) } });
   async function readMaint() {
     try {
-      const { data, error } = await sb.from('planque_settings').select('maintenance,message').eq('id', 1).maybeSingle();
-      if (!error && data) { maint = data; maintReady = true } else if (error) maintReady = false;
+      const { data, error } = await sb.from('planque_settings').select('*').eq('id', 1).maybeSingle();
+      if (!error && data) { const ch = JSON.stringify(data) !== JSON.stringify(maint); maint = data; maintReady = true; if (ch) emitSettings() } else if (error) maintReady = false;
     } catch {}
     return maint;
   }
+  let banned = false;
+  async function amBanned() {
+    if (!session) return false;
+    try { const { data, error } = await sb.rpc('planque_is_banned'); banned = !error && !!data } catch { banned = false }
+    return banned;
+  }
+  function showBanned() {
+    const m = $('#maintGate'); if (!m) return;
+    $('#maintTitle').textContent = 'Compte suspendu'; $('#maintIcon').textContent = '🚫'; $('#maintHint').hidden = true;
+    $('#maintMsg').textContent = 'Un admin de la Planque a suspendu ton compte. Si tu penses que c\'est une erreur, parle-lui directement.';
+    $('#maintLinks').innerHTML = '<button type="button" class="link" data-maint="logout">Se déconnecter</button>';
+    m.hidden = false;
+  }
+  window.ADMIN_IDS = new Set();
+  async function loadAdmins() {
+    try {
+      const { data, error } = await sb.rpc('planque_admin_ids'); if (error) return;
+      const next = new Set((data || []).map(x => typeof x === 'string' ? x : (x.planque_admin_ids || Object.values(x)[0])));
+      const same = next.size === window.ADMIN_IDS.size && [...next].every(x => window.ADMIN_IDS.has(x));
+      window.ADMIN_IDS = next;
+      if (!same && started && window.PLQ) try { window.PLQ.render() } catch {}
+    } catch {}
+  }
   function showMaint() {
     const m = $('#maintGate'); if (!m) return;
+    if (banned) { showBanned(); return }
+    $('#maintTitle').textContent = 'En maintenance'; $('#maintIcon').textContent = '🛠️'; $('#maintHint').hidden = false;
     $('#maintMsg').textContent = maint.message || MAINT_DEF;
     $('#maintLinks').innerHTML = session
       ? '<button type="button" class="link" data-maint="logout">Se déconnecter</button>'
@@ -135,7 +173,8 @@
   const hideMaint = () => { const m = $('#maintGate'); if (m) m.hidden = true };
   function banner() { const b = $('#maintBanner'); if (b) b.hidden = !(started && maint.maintenance) }
   async function applyMaint(m) {
-    if (m) maint = { ...maint, ...m };
+    if (m) { maint = { ...maint, ...m }; emitSettings() }
+    if (banned) return;
     if (maint.maintenance) {
       if (started && await amAdmin()) { banner(); updateMaintBox(); return }
       if (recovering) return;
@@ -153,13 +192,17 @@
     sb.channel('planque-settings')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'planque_settings' }, p => { if (p.new && 'maintenance' in p.new) applyMaint(p.new) })
       .subscribe();
-    const poll = () => { if (!document.hidden) readMaint().then(() => applyMaint()) };
+    const poll = async () => {
+      if (document.hidden) return;
+      await readMaint(); await applyMaint();
+      if (started) { loadAdmins(); if (await amBanned()) showBanned() }
+    };
     document.addEventListener('visibilitychange', poll);
     setInterval(poll, 60000);
   }
   function updateMaintBox() {
     const box = $('#maintBox'); if (!box || box.hidden) return;
-    if (!maintReady) { $('#maintState').innerHTML = 'Pour activer la maintenance, lance d\'abord le fichier <b>maintenance.sql</b> dans Supabase (SQL Editor).'; $('#maintToggle').hidden = true; $('#maintTextRow').hidden = true; return }
+    if (!maintReady) { $('#maintState').innerHTML = 'Pour activer la maintenance, lance d\'abord le fichier <b>admin.sql</b> dans Supabase (SQL Editor).'; $('#maintToggle').hidden = true; $('#maintTextRow').hidden = true; return }
     $('#maintToggle').hidden = false; $('#maintTextRow').hidden = false;
     $('#maintState').innerHTML = maint.maintenance ? '<b style="color:var(--pink,#ff4fa3)">Activée</b> : seuls les admins peuvent utiliser le site.' : '<b>Désactivée</b> : le site est ouvert à tous.';
     $('#maintToggle').textContent = maint.maintenance ? 'Rouvrir le site' : 'Mettre le site en maintenance';
@@ -198,7 +241,13 @@
     session = data.session;
     watchMaint();
     if (session && !recovering) start();
-    else if (!recovering) { await readMaint(); if (maint.maintenance) showMaint(); else if ($('#authGate').hidden) gate('login') }
+    else if (!recovering) {
+      await readMaint();
+      const inv = new URLSearchParams(location.search).get('invite');
+      if (maint.maintenance) showMaint();
+      else if (inv) { gate('signup'); $('#authInvite').value = inv.toUpperCase(); $('#authInviteRow').hidden = false }
+      else if ($('#authGate').hidden) gate('login');
+    }
   }
 
   /* ---------- Base de données : une table « docs » (chemin, collection, données) en temps réel ---------- */
@@ -265,6 +314,11 @@
 
   async function write(path, data) {
     const col = colOf(path), clean = JSON.parse(JSON.stringify(data ?? {}));
+    if (cache.has(path)) {
+      const { data: rows, error: ue } = await sb.from('docs').update({ data: clean }).eq('path', path).select('path');
+      if (ue) throw errCode(ue);
+      if (rows && rows.length) { put({ path, collection: col, data: clean }); return }
+    }
     const { error } = await sb.from('docs').upsert({ path, collection: col, data: clean }, { onConflict: 'path' });
     if (error) throw errCode(error);
     put({ path, collection: col, data: clean });
@@ -353,6 +407,7 @@
     try { const bmp = await createImageBitmap(blob); const c = document.createElement('canvas'); c.width = bmp.width; c.height = bmp.height; c.getContext('2d').drawImage(bmp, 0, 0); return await new Promise(r => c.toBlob(b => r(b || blob), 'image/jpeg', .85)) } catch { return blob }
   }
   async function callGuide(body, signal) {
+    if (maint.guide_on === false) { const x = new Error('off'); x.code = 'sampling_disabled'; x.text = ''; throw x }
     const { data: { session: s } } = await sb.auth.getSession();
     let r;
     try {
@@ -411,7 +466,7 @@
         case 'user': return user;
         case 'room': return room();
         case 'assets': return assets;
-        case 'sample': return CFG.GUIDE_ENABLED ? sample : null;
+        case 'sample': return CFG.GUIDE_ENABLED && maint.guide_on !== false ? sample : null;
         case 'dictation': return dictation();
         case 'tts': return null; // la voix du navigateur est utilisée directement par l'appli
         default: return null;
@@ -420,6 +475,18 @@
   };
   window.PLANQUE = {
     ready,
+    get sb() { return sb },
+    get settings() { return maint },
+    get settingsReady() { return maintReady },
+    get guideInstalled() { return !!CFG.GUIDE_ENABLED },
+    onSettings: cb => { setCbs.add(cb); return () => setCbs.delete(cb) },
+    saveSettings: async patch => {
+      const { error } = await sb.from('planque_settings').update(patch).eq('id', 1);
+      if (error) throw error;
+      maint = { ...maint, ...patch }; emitSettings(); banner(); updateMaintBox();
+    },
+    refreshAdmins: loadAdmins,
+    refreshSettings: () => readMaint(),
     photoBase: BASE_URL + '/storage/v1/object/public/photos/',
     logout: async () => { try { await sb?.auth.signOut() } catch {} try { ls?.removeItem('planque-auth'); ss?.removeItem('planque-auth') } catch {} location.reload() },
     get guideOn() { return !!CFG.GUIDE_ENABLED }

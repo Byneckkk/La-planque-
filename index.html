@@ -128,7 +128,42 @@ label .hint{display:block;font-weight:400;color:var(--muted);font-size:14px}
 form{display:flex;flex-direction:column;gap:14px}
 .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
-#authGate [hidden],#maintGate [hidden],#maintBox [hidden]{display:none!important}
+
+/* ---------- Panneau admin ---------- */
+.admb{display:inline-block;font-style:normal;vertical-align:middle;margin-left:6px;line-height:1}
+.admb::after{content:'ADMIN';display:inline-block;font:800 10px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;color:#1a0b24;background:linear-gradient(90deg,#ff4fa3,#ff9a3c);padding:3px 6px;border-radius:6px;box-shadow:0 0 10px rgba(255,79,163,.45)}
+.admb[hidden]{display:none}
+#annBar{margin:0 0 16px;border-radius:18px;padding:14px 16px;background:linear-gradient(90deg,rgba(255,79,163,.22),rgba(255,154,60,.18));border:1px solid rgba(255,79,163,.5);display:flex;gap:12px;align-items:flex-start}
+#annBar[hidden]{display:none}
+#annBar .ann-ic{font-size:22px;line-height:1.2}#annBar .ann-t{flex:1;min-width:0}#annBar .ann-t b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#ff4fa3;margin-bottom:2px}#annBar p{margin:0;color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere}
+#annBar .ann-x{background:none;border:0;color:var(--muted);font-size:24px;line-height:1;cursor:pointer;padding:2px 6px;min-height:0}
+.adm-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.adm-head h2{margin:0}
+.adm-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none;-webkit-overflow-scrolling:touch}.adm-tabs::-webkit-scrollbar{display:none}
+.adm-tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:9px 15px;font-weight:600;font-size:14px;line-height:1;font-family:inherit;cursor:pointer;display:flex;gap:6px;align-items:center;min-height:0}
+.adm-tabs button[aria-selected=true]{background:var(--ink);color:#1a0b24;border-color:var(--ink)}
+.adm-tabs .n{background:#ff4fa3;color:#fff;border-radius:999px;font-size:11px;padding:2px 6px}
+.adm-pane h3{margin:6px 0 10px}
+.adm-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;align-items:center}.adm-tools input{flex:1 1 200px;min-width:0}.adm-tools select{flex:0 0 auto;width:auto}
+.adm-box{margin-top:14px;display:grid;gap:10px}.adm-box h3{margin:0}.adm-box .src{margin:0}
+#maintBox{display:grid;gap:8px}#maintBox .btn{justify-self:start}
+.adm-stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:16px}
+.adm-stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px 16px;text-align:left;color:var(--ink);font-family:inherit;cursor:pointer;min-height:0}
+.adm-stat b{display:block;font-size:28px;line-height:1.1}.adm-stat small{color:var(--muted);font-size:13px}.adm-stat.hot{border-color:rgba(255,79,163,.6);box-shadow:0 0 0 1px rgba(255,79,163,.3) inset}
+.adm-list{display:grid;gap:10px}
+.adm-row{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:12px 14px;display:grid;gap:8px}
+.adm-row .adm-top{display:flex;align-items:center;gap:10px;min-width:0}.adm-row .adm-top>div{flex:1;min-width:0}.adm-row .adm-top b{overflow-wrap:anywhere}
+.adm-row .meta{color:var(--muted);font-size:13px;display:flex;flex-wrap:wrap;gap:4px 12px}
+.adm-row .acts{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.adm-row .acts .link{padding:4px 0;min-height:0}
+.adm-row.banned{border-color:rgba(255,107,107,.55);background:rgba(255,107,107,.08)}
+.adm-tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 6px;margin-left:6px;vertical-align:middle;background:rgba(255,255,255,.1);color:var(--muted)}
+.adm-tag.red{background:rgba(255,107,107,.2);color:#ff8a8a}.adm-tag.green{background:rgba(126,224,129,.18);color:#8fe892}.adm-tag.yel{background:rgba(255,206,84,.18);color:#ffd36a}
+.adm-inline{display:flex;gap:8px;flex-wrap:wrap}.adm-inline input,.adm-inline select{flex:1 1 160px;min-width:0}
+.adm-thumbs{display:flex;gap:6px}.adm-thumbs img{width:64px;height:64px;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#000}
+.adm-link{display:flex;gap:8px}.adm-link input{flex:1;min-width:0;font-size:13px}
+.adm-empty{color:var(--muted);font-size:14px;padding:10px 2px}
+.adm-bar{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;width:80px;flex:none}.adm-bar i{display:block;height:100%;background:linear-gradient(90deg,#2de2e6,#ff4fa3)}
+#authGate [hidden],#maintGate [hidden],#maintBox [hidden],#v-admin [hidden]{display:none!important}
 #maintBanner{position:fixed;left:0;right:0;top:0;z-index:55;background:linear-gradient(90deg,#ff4fa3,#ff9a3c);color:#1a0b24;font-weight:700;font-size:13px;text-align:center;padding:6px 10px}
 #maintBanner[hidden]{display:none}
 .authsheet{width:min(420px,100%);display:grid;gap:14px}
@@ -374,10 +409,10 @@ body{padding-bottom:90px}
       <div class="brand"><h1>La Planque</h1><p>Le QG de ta bande à Leonida : suis tes potes en direct, partagez vos trouvailles et trouvez tout ce qui est caché.</p></div>
       <a class="me" href="#profil" aria-label="Mon profil" aria-live="polite">
         <div class="ring"><svg viewBox="0 0 36 36"><circle class="bg" cx="18" cy="18" r="15.9"/><circle class="arc" id="ringArc" cx="18" cy="18" r="15.9" pathLength="100"/></svg><b id="mePct">0 %</b></div>
-        <div><span class="nm"><span id="meAv"></span><span id="meName">Invité</span></span><small id="meSub">Chargement…</small><span class="loggedin" id="meLog" hidden><i></i>Connecté</span></div>
+        <div><span class="nm"><span id="meAv"></span><span id="meName">Invité</span><i class="admb" id="meAdm" hidden title="Admin de la Planque"></i></span><small id="meSub">Chargement…</small><span class="loggedin" id="meLog" hidden><i></i>Connecté</span></div>
       </a>
     </div>
-    <nav class="tabs" aria-label="Sections"><a href="#accueil" data-main="accueil"><span>Accueil</span></a><a href="#trouver" data-main="trouver"><span>Trouver</span></a><a href="#bande" data-main="bande"><span>Ma bande</span><span class="cnt livecnt" hidden>0</span><span class="dot inboxdot" hidden></span></a><a href="#aide" data-main="aide"><span>Guide</span></a></nav>
+    <nav class="tabs" aria-label="Sections"><a href="#accueil" data-main="accueil"><span>Accueil</span></a><a href="#trouver" data-main="trouver"><span>Trouver</span></a><a href="#bande" data-main="bande"><span>Ma bande</span><span class="cnt livecnt" hidden>0</span><span class="dot inboxdot" hidden></span></a><a href="#aide" data-main="aide"><span>Guide</span></a><a href="#admin" data-main="admin" class="admtab" hidden><span>Admin</span></a></nav>
   </div>
 </header>
 
@@ -386,6 +421,7 @@ body{padding-bottom:90px}
   <p id="status" hidden></p>
 
   <section id="v-accueil" hidden>
+    <div id="annBar" hidden></div>
     <div class="homehead"><div><h2 id="homeHello">Salut !</h2><p id="homeWhere"></p></div><div class="homeacts"><span id="homeSess"></span><button class="btn big go" id="homePlay" data-act="mmplay">Je lance une partie</button></div></div>
     <div class="homegrid">
       <div class="panel"><div class="sess-head" style="margin-bottom:10px"><h2>Ma liste de ce soir</h2><a class="link" href="#manette">Mode manette posée</a></div><div id="homeList"></div></div>
@@ -503,6 +539,58 @@ body{padding-bottom:90px}
     </div>
   </section>
 
+  <section id="v-admin" hidden>
+    <div class="adm-head"><div><h2>Panneau admin</h2><p class="src" id="admSub">Tout ce qui se passe dans la Planque, au même endroit.</p></div></div>
+    <div class="adm-tabs" id="admTabs" role="tablist"></div>
+    <div id="admNotice"></div>
+    <div class="adm-pane" data-pane="dash"><div id="admDash"></div></div>
+    <div class="adm-pane" data-pane="members" hidden>
+      <div class="adm-tools"><input id="admMemQ" type="search" placeholder="Chercher un pseudo ou un e-mail"><select id="admMemF"><option value="all">Tout le monde</option><option value="online">En ligne</option><option value="admins">Admins</option><option value="banned">Bannis</option><option value="noprofile">Sans pseudo</option></select></div>
+      <div id="admMembers"></div>
+    </div>
+    <div class="adm-pane" data-pane="fiches" hidden>
+      <div class="adm-tools"><input id="admFicheQ" type="search" placeholder="Chercher une fiche"><select id="admFicheF"><option value="all">Toutes</option><option value="verifier">À vérifier</option><option value="confirme">Confirmées</option><option value="reported">Signalées</option></select><button class="btn sm" type="button" data-adm="newfiche">+ Nouvelle fiche</button></div>
+      <div id="admFiches"></div>
+      <div class="panel adm-box"><h3>Sauvegarde et import</h3><p class="src">Copie toutes les fiches et les points de la carte, ou réimporte une sauvegarde (les fiches qui ont le même identifiant sont remplacées).</p>
+        <div class="popact"><button class="btn ghost sm" type="button" data-act="export">Sauvegarder les fiches</button><button class="btn ghost sm" type="button" data-adm="importopen">Importer une sauvegarde</button></div>
+        <div id="exportOut"></div>
+        <div id="admImport" hidden><textarea id="admImportTxt" rows="5" placeholder="Colle ici le texte de la sauvegarde"></textarea><div class="popact" style="margin-top:8px"><button class="btn sm" type="button" data-adm="importgo">Importer</button><span class="src" id="admImportMsg"></span></div></div>
+      </div>
+    </div>
+    <div class="adm-pane" data-pane="moder" hidden>
+      <h3>Signalements</h3><div id="admReports"></div>
+      <h3 style="margin-top:24px">Trouvailles postées</h3><div id="admPosts"></div>
+      <h3 style="margin-top:24px">Clubs</h3><div id="admClubs"></div>
+    </div>
+    <div class="adm-pane" data-pane="announce" hidden>
+      <div class="panel adm-box"><h3>Annonce pour toute la bande</h3><p class="src">Elle s'affiche en haut de l'accueil de tout le monde, tout de suite.</p>
+        <textarea id="admAnnText" rows="3" maxlength="280" placeholder="Ex. : Session braquage samedi 21h, tout le monde sur le vocal !"></textarea>
+        <div class="popact"><button class="btn sm" type="button" data-adm="annpub">Publier l'annonce</button><button class="btn ghost sm" type="button" data-adm="annoff">Retirer l'annonce</button></div>
+        <p class="src" id="admAnnState"></p>
+        <h4 style="margin:8px 0 0">Aperçu</h4><div id="admAnnPrev"></div>
+      </div>
+    </div>
+    <div class="adm-pane" data-pane="access" hidden>
+      <div class="panel adm-box"><div id="maintBox" hidden><h3>Maintenance</h3><p class="src" id="maintState" style="margin:6px 0 10px"></p><label id="maintTextRow" style="display:grid;gap:6px;margin-bottom:10px">Message affiché aux potes<input id="maintText" maxlength="200"></label><button class="btn ghost sm" type="button" id="maintToggle">Mettre le site en maintenance</button></div></div>
+      <div class="panel adm-box"><h3>Inscriptions</h3><p class="src" id="admSignState"></p>
+        <label class="check"><input type="checkbox" id="admSignOpen"> Les nouvelles personnes peuvent créer un compte</label>
+        <label class="check"><input type="checkbox" id="admInvReq"> Il faut un code d'invitation pour s'inscrire</label>
+        <div id="admInvBox"><label style="display:grid;gap:6px;margin-top:6px">Code d'invitation<input id="admInvCode" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
+          <div class="popact" style="margin-top:8px"><button class="btn sm" type="button" data-adm="invsave">Enregistrer le code</button><button class="btn ghost sm" type="button" data-adm="invgen">Nouveau code au hasard</button></div>
+          <p class="src" style="margin-top:12px">Lien d'invitation à envoyer (le code est déjà rempli) :</p><div class="adm-link"><input id="admInvLink" readonly><button class="btn ghost sm" type="button" data-adm="invcopy">Copier</button></div></div>
+        <p class="src" id="admSignMsg"></p>
+      </div>
+    </div>
+    <div class="adm-pane" data-pane="guide" hidden>
+      <div class="panel adm-box"><h3>Le Guide IA</h3><p class="src" id="admGuideState"></p>
+        <label class="check"><input type="checkbox" id="admGuideOn"> Le Guide est activé pour la bande</label>
+        <label style="display:grid;gap:6px">Questions par personne et par jour<input id="admGuideLim" type="number" min="1" max="500" inputmode="numeric"></label>
+        <div class="popact"><button class="btn sm" type="button" data-adm="guidesave">Enregistrer</button></div>
+        <p class="src" id="admGuideMsg"></p>
+      </div>
+      <h3 style="margin-top:22px">Qui l'utilise</h3><div id="admGuideUse"></div>
+    </div>
+  </section>
   <section id="v-profil" hidden>
     <div class="cols">
       <div class="panel"><h2>Ma progression</h2><p>Par catégorie, sur tous les secrets répertoriés.</p><ol class="board" id="mycats"></ol><h3 style="margin-top:22px">Mes badges</h3><div class="badges" id="mybadges" style="margin-top:10px"></div></div>
@@ -520,8 +608,7 @@ body{padding-bottom:90px}
         <h3 style="margin-top:26px">Inviter tes potes</h3>
         <p style="margin-top:6px">Envoie simplement le lien du site à tes potes. Chacun crée son compte avec son e-mail et un mot de passe, choisit son pseudo, et apparaît dans « En direct ». Avec « Se souvenir de moi », il est connecté directement à chaque ouverture.</p>
         <div id="logoutBox" hidden style="margin-top:22px"><h3>Connexion</h3><p class="src" style="margin:6px 0 10px">Connecté avec <b id="logoutMail"></b></p><button class="btn ghost sm" type="button" onclick="PLANQUE.logout()">Se déconnecter</button></div>
-        <div id="exportBox" hidden style="margin-top:22px"><h3>Admin : sauvegarde</h3><p class="src" style="margin:6px 0 10px">Copie toutes les fiches et les points de la carte (au format JSON) pour les garder de côté.</p><button class="btn ghost sm" data-act="export">Sauvegarder les fiches</button><div id="exportOut"></div>
-        <div id="maintBox" hidden style="margin-top:22px"><h3>Admin : maintenance</h3><p class="src" id="maintState" style="margin:6px 0 10px"></p><label id="maintTextRow" style="display:grid;gap:6px;margin-bottom:10px">Message affiché aux potes<input id="maintText" maxlength="200"></label><button class="btn ghost sm" type="button" id="maintToggle">Mettre le site en maintenance</button></div></div>
+        <div id="exportBox" hidden style="margin-top:22px"><h3>Admin</h3><p class="src" style="margin:6px 0 10px">Membres, fiches, modération, annonces, accès, Guide : tout se gère depuis le panneau.</p><a class="btn sm" href="#admin">Ouvrir le panneau admin</a></div>
       </div>
     </div>
   </section>
@@ -603,14 +690,14 @@ body{padding-bottom:90px}
 <div class="overlay" id="maintGate" hidden style="z-index:70;background:radial-gradient(circle at 30% 10%,rgba(255,79,163,.28),transparent 55%),radial-gradient(circle at 80% 90%,rgba(45,226,230,.22),transparent 55%),#140a1f">
   <div class="sheet authsheet" style="text-align:center;justify-items:center">
     <div class="authbrand">La Planque</div>
-    <div style="font-size:46px;line-height:1">🛠️</div>
-    <h2>En maintenance</h2>
+    <div style="font-size:46px;line-height:1" id="maintIcon">🛠️</div>
+    <h2 id="maintTitle">En maintenance</h2>
     <p id="maintMsg" style="font-size:17px"></p>
-    <p class="authsub" style="margin:0!important">La page se rouvrira toute seule dès que c'est fini.</p>
+    <p class="authsub" id="maintHint" style="margin:0!important">La page se rouvrira toute seule dès que c'est fini.</p>
     <div class="authlinks" id="maintLinks" style="align-items:center"></div>
   </div>
 </div>
-<div id="maintBanner" hidden>🛠️ Maintenance activée : seuls les admins voient le site. Pour rouvrir : Mon profil &gt; Admin : maintenance.</div>
+<div id="maintBanner" hidden>🛠️ Maintenance activée : seuls les admins voient le site. Pour rouvrir : Admin &gt; Accès.</div>
 <div class="overlay" id="authGate" hidden style="z-index:60;background:radial-gradient(circle at 30% 10%,rgba(255,79,163,.28),transparent 55%),radial-gradient(circle at 80% 90%,rgba(45,226,230,.22),transparent 55%),#140a1f">
   <div class="sheet authsheet">
     <div class="authbrand">La Planque</div>
@@ -621,6 +708,7 @@ body{padding-bottom:90px}
       <label id="authEmailRow">E-mail<input id="authEmail" type="email" autocomplete="email" inputmode="email" required></label>
       <label id="authPassRow">Mot de passe<input id="authPass" type="password" autocomplete="current-password" required minlength="8"></label>
       <label id="authPass2Row" hidden>Encore une fois<input id="authPass2" type="password" autocomplete="new-password" minlength="8"></label>
+      <label id="authInviteRow" hidden>Code d'invitation<input id="authInvite" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Demande-le à l'admin"></label>
       <label class="check" id="authRemRow"><input type="checkbox" id="authRem" checked> Se souvenir de moi</label>
       <div class="actions"><button class="btn" type="submit" id="authGo">Se connecter</button></div>
     </form>
@@ -664,7 +752,8 @@ const initials=p=>(p?.pseudo||'?').trim().slice(0,2).toUpperCase();
 const av=(id,cls)=>{const p=players[id]||{};const ph=p.photo&&/^[A-Za-z0-9_-]{8,64}$/.test(p.photo)?`;background-image:url('${PLANQUE.photoBase}${p.photo}')`:'';return `<span class="av${cls?' '+cls:''}${ph?' ph':''}" style="background-color:${esc(p.color||'#888')}${ph}" title="${esc(p.pseudo||'Joueur')}">${esc(initials(p))}</span>`};
 const PLATS={ps5:'PS5',xbox:'Xbox Series',pc:'PC'},FAVS={jason:'Jason',lucia:'Lucia','':'Les deux'};
 let draft={plat:'',fav:'',photo:null,photoBlob:null};
-const name=id=>id===BASE?'La Planque':esc(players[id]?.pseudo||'Un joueur');
+const admB=id=>window.ADMIN_IDS&&window.ADMIN_IDS.has(id)?'<i class="admb" title="Admin de la Planque"></i>':'';
+const name=id=>id===BASE?'La Planque':esc(players[id]?.pseudo||'Un joueur')+admB(id);
 const myFound=()=>players[me]?.found||{};
 const myChap=()=>+(players[me]?.chapter||1);
 const foundBy=sid=>Object.keys(players).filter(pid=>players[pid]?.found?.[sid]);
@@ -689,7 +778,7 @@ function swatches(){const h=COLORS.map(c=>`<button type="button" class="sw" data
 function renderMe(){
   const total=secrets.length,n=me?countFound(me):0,p=pct(n,total);
   $('#mePct').textContent=p+' %';$('#ringArc').style.strokeDashoffset=String(100-p);$('#ringArc').style.opacity=p?1:0;
-  $('#meName').textContent=players[me]?.pseudo||'Invité';$('#meLog').hidden=!players[me];
+  $('#meName').textContent=players[me]?.pseudo||'Invité';$('#meAdm').hidden=!(window.ADMIN_IDS&&window.ADMIN_IDS.has(me));$('#meLog').hidden=!players[me];
   $('#meAv').innerHTML=me&&players[me]?av(me,'lg'):'';
   $('#meSub').textContent=!loaded?'Chargement…':total?`${n} / ${total} secrets · chapitre ${myChap()}`:'Aucun secret pour l\'instant';
   const lc=Object.values(players).filter(p=>isPlaying(p)).length;document.querySelectorAll('.livecnt').forEach(e=>{e.textContent=lc+(e.closest('.bnav')?'':' en jeu');e.hidden=!lc});
@@ -753,7 +842,7 @@ function card(s){
     ${!conf&&s.status==='verifier'&&canWrite&&players[me]?`<div class="rumor"><span>Tu l'as vérifié en jeu ?${fakes?` ${fakes} ne l'${fakes>1?'ont':'a'} pas trouvé.`:''}</span><button class="btn sm" data-act="confirm" data-id="${s.id}">C'est vrai</button><button class="btn ghost sm${s.fakeBy?.[me]?' on':''}" data-act="fake" data-id="${s.id}" aria-pressed="${!!s.fakeBy?.[me]}">Introuvable</button></div>`:''}
     <div class="foot"><div class="who">${who.slice(0,6).map(id=>av(id,'sm')).join('')}<small>${lab}</small></div>
     ${canWrite&&players[me]?`<button class="btn found${mine?' on':''}" data-act="found" data-id="${s.id}" aria-pressed="${mine}">${mine?'✓ Trouvé':'Je l\'ai'}</button>`:''}</div>
-    <div class="mod">${canWrite&&players[me]?`<button class="link pinlink${myPins()[s.id]?' on':''}" data-act="pin" data-id="${s.id}">${myPins()[s.id]?'✓ Dans ma liste':'+ Ma liste'}</button>`:''}<button class="link" data-act="onmap" data-id="${s.id}">Voir sur la carte</button><button class="link" data-act="askguide" data-id="${s.id}">Demander au Guide</button>${canMod?`<button class="link" data-act="edit" data-id="${s.id}">Modifier</button><button class="link danger" data-act="del" data-id="${s.id}">Supprimer</button>`:''}</div>
+    <div class="mod">${canWrite&&players[me]?`<button class="link pinlink${myPins()[s.id]?' on':''}" data-act="pin" data-id="${s.id}">${myPins()[s.id]?'✓ Dans ma liste':'+ Ma liste'}</button>`:''}<button class="link" data-act="onmap" data-id="${s.id}">Voir sur la carte</button><button class="link" data-act="askguide" data-id="${s.id}">Demander au Guide</button>${canMod?`<button class="link" data-act="edit" data-id="${s.id}">Modifier</button><button class="link danger" data-act="del" data-id="${s.id}">Supprimer</button>`:''}${!canMod&&me?`<button class="link" data-act="report" data-kind="secret" data-id="${s.id}">Signaler</button>`:''}</div>
   </article>`;
 }
 const ZONES=[
@@ -900,11 +989,11 @@ function renderProfile(){
   if(mine&&!profFilled){profFilled=true;$('#pfPseudo').value=mine.pseudo||'';$('#pfTag').value=mine.gamertag||'';pickColor=mine.color||pickColor;draft={plat:mine.platform||'',fav:mine.fav||'',photo:mine.photo||null,photoBlob:null};swatches()}
 }
 const renderOnboard=()=>{$('#onboard').hidden=!(loaded&&me&&canWrite&&!players[me])};
-function render(){if(mapInit)renderMap();renderGroupTab();renderManette();renderHome();renderNavBadges();renderMe();renderLive();renderSecrets();renderGroup();renderProfile();renderOnboard();renderPosts();$('#fab').hidden=!(loaded&&canWrite&&players[me])}
+function render(){if(mapInit)renderMap();renderGroupTab();renderManette();renderHome();renderNavBadges();renderMe();renderLive();renderSecrets();renderGroup();renderProfile();renderOnboard();renderPosts();$('#fab').hidden=!(loaded&&canWrite&&players[me]);if(window.__admRender)window.__admRender()}
 
-const ROUTES={accueil:['accueil','accueil'],trouver:['guide','trouver'],guide:['guide','trouver'],carte:['carte','trouver'],bande:['direct','bande'],direct:['direct','bande'],trouvailles:['trouvailles','bande'],groupe:['groupe','bande'],aide:['aide','aide'],profil:['profil',''],manette:['manette','']};
+const ROUTES={accueil:['accueil','accueil'],trouver:['guide','trouver'],guide:['guide','trouver'],carte:['carte','trouver'],bande:['direct','bande'],direct:['direct','bande'],trouvailles:['trouvailles','bande'],groupe:['groupe','bande'],aide:['aide','aide'],profil:['profil',''],manette:['manette',''],admin:['admin','admin']};
 const SUBS={trouver:[['trouver','Liste','guide'],['carte','Carte','carte']],bande:[['bande','En direct','direct'],['trouvailles','Trouvailles','trouvailles'],['groupe','Clubs et amis','groupe']]};
-const SECS=['accueil','guide','carte','direct','trouvailles','groupe','aide','profil','manette'];
+const SECS=['accueil','guide','carte','direct','trouvailles','groupe','aide','profil','manette','admin'];
 function renderNavBadges(){const n=typeof inboxCount==='function'?inboxCount():0;document.querySelectorAll('.inboxdot').forEach(e=>e.hidden=!n)}
 function route(){const h=location.hash.slice(1),[sec,main]=ROUTES[h]||ROUTES.accueil;
   for(const x of SECS)$('#v-'+x).hidden=x!==sec;
@@ -1065,7 +1154,7 @@ function postCard(po){
       ${s?`<p>A trouvé <button class="link" style="padding:0;min-height:0;font-size:16px;color:var(--ink)" data-act="gosecret" data-id="${s.id}">${safeTitle(s)}</button></p>`:''}
       ${po.note?`<p>${esc(po.note)}</p>`:''}${ai}
       <div class="pfoot"><div style="display:flex;align-items:center;gap:10px"><button class="like${liked?' on':''}" data-act="like" data-id="${po.id}" aria-pressed="${liked}" aria-label="J'aime">${HEART}<span>${likers.length}</span></button><div class="who">${likers.slice(0,5).map(id=>av(id,'sm')).join('')}</div></div>
-      ${mine||isOwner?`<button class="link danger" data-act="delpost" data-id="${po.id}">Supprimer</button>`:''}</div>
+      <span>${!mine&&me?`<button class="link" data-act="report" data-kind="post" data-id="${po.id}">Signaler</button>`:''}${mine||isOwner?`<button class="link danger" data-act="delpost" data-id="${po.id}">Supprimer</button>`:''}</span></div>
     </div>
   </article>`;
 }
@@ -1396,7 +1485,7 @@ ${spokenNext||location.hash==='#manette'?'Cette question a été posée à voix 
 
 Données de la Planque (JSON) :
 ${guideData()}`}
-const ERR={not_granted:'Tu n\'as pas autorisé le Guide. Recharge la page pour qu\'il te redemande.',sampling_disabled:'Le Guide n\'est pas disponible sur ce compte.',rate_limited:'Trop de questions pour aujourd\'hui (ou d\'un coup). Réessaie plus tard.',refused:'Le Guide ne peut pas répondre à ça. Reformule ta question.',session_expired:'Ta session a expiré : recharge la page et reconnecte-toi.',network:'Pas de connexion au Guide. Vérifie ton internet.',empty_completion:'Le Guide n\'a rien répondu. Reformule ta question.'};
+const ERR={not_granted:'Tu n\'as pas autorisé le Guide. Recharge la page pour qu\'il te redemande.',sampling_disabled:'Le Guide est coupé pour le moment par l\'admin.',rate_limited:'Trop de questions pour aujourd\'hui (ou d\'un coup). Réessaie plus tard.',refused:'Le Guide ne peut pas répondre à ça. Reformule ta question.',session_expired:'Ta session a expiré : recharge la page et reconnecte-toi.',network:'Pas de connexion au Guide. Vérifie ton internet.',empty_completion:'Le Guide n\'a rien répondu. Reformule ta question.'};
 async function ask(q){
   q=String(q||'').trim();if(!q||busy)return;
   if(!sample){chat.push({role:'user',content:q},{role:'assistant',content:sample===false?'Le Guide n\'est pas encore activé sur ce site : l\'admin doit faire l\'étape « Guide » du mode d\'emploi.':'Le Guide se prépare, réessaie dans quelques secondes.',err:true});renderChat();return}
@@ -1449,7 +1538,9 @@ setInterval(()=>{if(loaded&&!document.hidden){renderMe();renderLive()}},60000);
   const room=await claude.use('room');
   if(room&&me){room.presence({id:me}).catch(()=>{});room.onPeers(ch=>{online=new Set(ch.peers.map(p=>p.by||p.presence?.id).filter(x=>typeof x==='string'));renderLive()},()=>{})}
 })();
+window.PLQ={get isOwner(){return isOwner},get players(){return players},get secrets(){return secrets},get posts(){return posts},get clubs(){return clubs},get online(){return online},get me(){return me},get db(){return db},get loaded(){return loaded},get assets(){return assets},get byId(){return byId},esc,ago,av,name,countFound,pct,catOf,REGIONS,BASE,toast,openForm,isPlaying,writeErr,render:()=>render()};
 }
 </script>
+<script src="planque-admin.js"></script>
 </body>
 </html>
