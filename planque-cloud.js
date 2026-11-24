@@ -99,10 +99,83 @@
   const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   let recovering = /type=recovery/.test(location.hash);
-  function start() {
-    if (started || !session || recovering) return;
-    started = true; hideGate(); resolveReady();
-    const out = $('#logoutBox'); if (out) { out.hidden = false; $('#logoutMail').textContent = session.user.email || '' }
+  let starting = false;
+  async function start(skipRead) {
+    if (started || starting || !session || recovering) return;
+    starting = true;
+    try {
+      if (skipRead !== true) await readMaint();
+      if (maint.maintenance && !(await amAdmin())) { hideGate(); showMaint(); return }
+      started = true; hideGate(); hideMaint(); resolveReady();
+      const out = $('#logoutBox'); if (out) { out.hidden = false; $('#logoutMail').textContent = session.user.email || '' }
+      if (await amAdmin()) setupMaintBox();
+      banner();
+    } finally { starting = false }
+  }
+
+  /* ---------- Mode maintenance (réglé par un admin, depuis son profil) ---------- */
+  const MAINT_DEF = 'La Planque fait une petite mise à jour. Reviens dans quelques minutes !';
+  let maint = { maintenance: false, message: '' }, maintReady = false, adminP2 = null;
+  const amAdmin = () => session ? (adminP2 || (adminP2 = sb.rpc('planque_is_admin').then(r => !!r.data).catch(() => false))) : Promise.resolve(false);
+  async function readMaint() {
+    try {
+      const { data, error } = await sb.from('planque_settings').select('maintenance,message').eq('id', 1).maybeSingle();
+      if (!error && data) { maint = data; maintReady = true } else if (error) maintReady = false;
+    } catch {}
+    return maint;
+  }
+  function showMaint() {
+    const m = $('#maintGate'); if (!m) return;
+    $('#maintMsg').textContent = maint.message || MAINT_DEF;
+    $('#maintLinks').innerHTML = session
+      ? '<button type="button" class="link" data-maint="logout">Se déconnecter</button>'
+      : '<button type="button" class="link" data-maint="login">Tu es admin ? <b>Te connecter</b></button>';
+    m.hidden = false;
+  }
+  const hideMaint = () => { const m = $('#maintGate'); if (m) m.hidden = true };
+  function banner() { const b = $('#maintBanner'); if (b) b.hidden = !(started && maint.maintenance) }
+  async function applyMaint(m) {
+    if (m) maint = { ...maint, ...m };
+    if (maint.maintenance) {
+      if (started && await amAdmin()) { banner(); updateMaintBox(); return }
+      if (recovering) return;
+      showMaint();
+    } else {
+      const shown = !$('#maintGate')?.hidden;
+      hideMaint(); banner();
+      if (shown) { if (session && !started) start(true); else if (!session) gate('login') }
+    }
+    updateMaintBox();
+  }
+  let maintWatching = false;
+  function watchMaint() {
+    if (maintWatching) return; maintWatching = true;
+    sb.channel('planque-settings')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'planque_settings' }, p => { if (p.new && 'maintenance' in p.new) applyMaint(p.new) })
+      .subscribe();
+    const poll = () => { if (!document.hidden) readMaint().then(() => applyMaint()) };
+    document.addEventListener('visibilitychange', poll);
+    setInterval(poll, 60000);
+  }
+  function updateMaintBox() {
+    const box = $('#maintBox'); if (!box || box.hidden) return;
+    if (!maintReady) { $('#maintState').innerHTML = 'Pour activer la maintenance, lance d\'abord le fichier <b>maintenance.sql</b> dans Supabase (SQL Editor).'; $('#maintToggle').hidden = true; $('#maintTextRow').hidden = true; return }
+    $('#maintToggle').hidden = false; $('#maintTextRow').hidden = false;
+    $('#maintState').innerHTML = maint.maintenance ? '<b style="color:var(--pink,#ff4fa3)">Activée</b> : seuls les admins peuvent utiliser le site.' : '<b>Désactivée</b> : le site est ouvert à tous.';
+    $('#maintToggle').textContent = maint.maintenance ? 'Rouvrir le site' : 'Mettre le site en maintenance';
+    if (document.activeElement !== $('#maintText')) $('#maintText').value = maint.message || MAINT_DEF;
+  }
+  function setupMaintBox() {
+    const box = $('#maintBox'); if (!box) return;
+    box.hidden = false; updateMaintBox();
+    $('#maintToggle').onclick = async () => {
+      const btn = $('#maintToggle'); btn.disabled = true;
+      const next = !maint.maintenance, message = ($('#maintText').value || '').trim().slice(0, 200) || MAINT_DEF;
+      const { error } = await sb.from('planque_settings').update({ maintenance: next, message }).eq('id', 1);
+      btn.disabled = false;
+      if (error) { $('#maintState').textContent = 'Ça n\'a pas marché : ' + error.message; return }
+      maint = { ...maint, maintenance: next, message }; banner(); updateMaintBox();
+    };
   }
 
   async function boot() {
@@ -117,9 +190,15 @@
       if (changedUser) location.reload();
       if (s) setTimeout(start, 0);
     });
+    $('#maintGate')?.addEventListener('click', e => {
+      const b = e.target.closest('[data-maint]'); if (!b) return;
+      if (b.dataset.maint === 'login') { hideMaint(); gate('login') } else window.PLANQUE.logout();
+    });
     const { data } = await sb.auth.getSession();
     session = data.session;
-    if (session && !recovering) start(); else if (!recovering && $('#authGate').hidden) gate('login');
+    watchMaint();
+    if (session && !recovering) start();
+    else if (!recovering) { await readMaint(); if (maint.maintenance) showMaint(); else if ($('#authGate').hidden) gate('login') }
   }
 
   /* ---------- Base de données : une table « docs » (chemin, collection, données) en temps réel ---------- */

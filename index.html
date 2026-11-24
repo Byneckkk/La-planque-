@@ -128,7 +128,9 @@ label .hint{display:block;font-weight:400;color:var(--muted);font-size:14px}
 form{display:flex;flex-direction:column;gap:14px}
 .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
-#authGate [hidden]{display:none!important}
+#authGate [hidden],#maintGate [hidden],#maintBox [hidden]{display:none!important}
+#maintBanner{position:fixed;left:0;right:0;top:0;z-index:55;background:linear-gradient(90deg,#ff4fa3,#ff9a3c);color:#1a0b24;font-weight:700;font-size:13px;text-align:center;padding:6px 10px}
+#maintBanner[hidden]{display:none}
 .authsheet{width:min(420px,100%);display:grid;gap:14px}
 .authsheet form{display:grid;gap:14px}
 .authbrand{font-family:Yellowtail,cursive;font-size:44px;line-height:1;color:var(--pink,#ff4fa3);text-shadow:0 0 18px rgba(255,79,163,.6)}
@@ -518,7 +520,8 @@ body{padding-bottom:90px}
         <h3 style="margin-top:26px">Inviter tes potes</h3>
         <p style="margin-top:6px">Envoie simplement le lien du site à tes potes. Chacun crée son compte avec son e-mail et un mot de passe, choisit son pseudo, et apparaît dans « En direct ». Avec « Se souvenir de moi », il est connecté directement à chaque ouverture.</p>
         <div id="logoutBox" hidden style="margin-top:22px"><h3>Connexion</h3><p class="src" style="margin:6px 0 10px">Connecté avec <b id="logoutMail"></b></p><button class="btn ghost sm" type="button" onclick="PLANQUE.logout()">Se déconnecter</button></div>
-        <div id="exportBox" hidden style="margin-top:22px"><h3>Admin : sauvegarde</h3><p class="src" style="margin:6px 0 10px">Copie toutes les fiches et les points de la carte (au format JSON) pour les garder de côté.</p><button class="btn ghost sm" data-act="export">Sauvegarder les fiches</button><div id="exportOut"></div></div>
+        <div id="exportBox" hidden style="margin-top:22px"><h3>Admin : sauvegarde</h3><p class="src" style="margin:6px 0 10px">Copie toutes les fiches et les points de la carte (au format JSON) pour les garder de côté.</p><button class="btn ghost sm" data-act="export">Sauvegarder les fiches</button><div id="exportOut"></div>
+        <div id="maintBox" hidden style="margin-top:22px"><h3>Admin : maintenance</h3><p class="src" id="maintState" style="margin:6px 0 10px"></p><label id="maintTextRow" style="display:grid;gap:6px;margin-bottom:10px">Message affiché aux potes<input id="maintText" maxlength="200"></label><button class="btn ghost sm" type="button" id="maintToggle">Mettre le site en maintenance</button></div></div>
       </div>
     </div>
   </section>
@@ -596,6 +599,18 @@ body{padding-bottom:90px}
   </form>
 </div>
 
+
+<div class="overlay" id="maintGate" hidden style="z-index:70;background:radial-gradient(circle at 30% 10%,rgba(255,79,163,.28),transparent 55%),radial-gradient(circle at 80% 90%,rgba(45,226,230,.22),transparent 55%),#140a1f">
+  <div class="sheet authsheet" style="text-align:center;justify-items:center">
+    <div class="authbrand">La Planque</div>
+    <div style="font-size:46px;line-height:1">🛠️</div>
+    <h2>En maintenance</h2>
+    <p id="maintMsg" style="font-size:17px"></p>
+    <p class="authsub" style="margin:0!important">La page se rouvrira toute seule dès que c'est fini.</p>
+    <div class="authlinks" id="maintLinks" style="align-items:center"></div>
+  </div>
+</div>
+<div id="maintBanner" hidden>🛠️ Maintenance activée : seuls les admins voient le site. Pour rouvrir : Mon profil &gt; Admin : maintenance.</div>
 <div class="overlay" id="authGate" hidden style="z-index:60;background:radial-gradient(circle at 30% 10%,rgba(255,79,163,.28),transparent 55%),radial-gradient(circle at 80% 90%,rgba(45,226,230,.22),transparent 55%),#140a1f">
   <div class="sheet authsheet">
     <div class="authbrand">La Planque</div>
