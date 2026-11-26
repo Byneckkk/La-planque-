@@ -4,9 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>La Planque</title>
+<script>try{var k=localStorage.getItem("planque.skin");if(k==="miami"||k==="mission")document.documentElement.dataset.skin=k;else document.documentElement.dataset.skin="neon"}catch(e){document.documentElement.dataset.skin="neon"}</script>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#140a1f">
+<link rel="icon" type="image/png" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="La Planque">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Outfit:wght@400;500;600;700&family=Yellowtail&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=Outfit:wght@400;500;600;700&family=Yellowtail&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 /* VOICE: nuit chaude sur la côte, néons et palmiers ; une app de bande qui a du style
    IDEA: une carte postale de Vice City la nuit, devenue le QG de la bande
@@ -129,6 +138,16 @@ form{display:flex;flex-direction:column;gap:14px}
 .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
 
+/* ---------- Appli installable ---------- */
+#installCard{margin:0 0 16px;border-radius:18px;padding:12px 14px;background:var(--card);border:1px solid rgba(45,226,230,.45);display:flex;gap:12px;align-items:center}
+#installCard[hidden],#installBox[hidden]{display:none}
+#installCard img{border-radius:12px;flex:none}#installCard .inst-t{flex:1;min-width:0}#installCard .inst-t b{display:block}#installCard p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+#installCard .inst-a{display:flex;align-items:center;gap:2px;flex:none}
+#installCard .ann-x{background:none;border:0;box-shadow:none;color:var(--muted);font-size:24px;line-height:1;padding:2px 6px;min-height:0;cursor:pointer}
+.inst-steps{margin:0;padding-left:22px;display:grid;gap:12px;font-size:16px;line-height:1.45}.inst-steps b{color:var(--ink)}
+.inst-ic{display:inline-flex;vertical-align:-4px;width:22px;height:22px;border:1.5px solid currentColor;border-radius:6px;align-items:center;justify-content:center;font-size:13px;margin:0 2px}
+@media (display-mode: standalone){#installCard,#installBox{display:none!important}}
+
 /* ---------- Panneau admin ---------- */
 .admb{display:inline-block;font-style:normal;vertical-align:middle;margin-left:6px;line-height:1}
 .admb::after{content:'ADMIN';display:inline-block;font:800 10px/1 Inter,system-ui,sans-serif;letter-spacing:.08em;color:#1a0b24;background:linear-gradient(90deg,#ff4fa3,#ff9a3c);padding:3px 6px;border-radius:6px;box-shadow:0 0 10px rgba(255,79,163,.45)}
@@ -163,7 +182,7 @@ form{display:flex;flex-direction:column;gap:14px}
 .adm-link{display:flex;gap:8px}.adm-link input{flex:1;min-width:0;font-size:13px}
 .adm-empty{color:var(--muted);font-size:14px;padding:10px 2px}
 .adm-bar{height:8px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;width:80px;flex:none}.adm-bar i{display:block;height:100%;background:linear-gradient(90deg,#2de2e6,#ff4fa3)}
-#authGate [hidden],#maintGate [hidden],#maintBox [hidden],#v-admin [hidden]{display:none!important}
+#authGate [hidden],#maintGate [hidden],#maintBox [hidden],#v-admin [hidden],#installSheet [hidden]{display:none!important}
 #maintBanner{position:fixed;left:0;right:0;top:0;z-index:55;background:linear-gradient(90deg,#ff4fa3,#ff9a3c);color:#1a0b24;font-weight:700;font-size:13px;text-align:center;padding:6px 10px}
 #maintBanner[hidden]{display:none}
 .authsheet{width:min(420px,100%);display:grid;gap:14px}
@@ -213,7 +232,7 @@ form{display:flex;flex-direction:column;gap:14px}
 .bnav{display:none}
 @media(max-width:760px){
  .top .tabs{display:none}.top{min-height:0;padding-bottom:16px}.brand h1{font-size:54px;margin:0 0 4px}.brand p{display:none}.top .wrap{gap:10px}
- .bnav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:16;background:rgba(20,10,31,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 4px max(8px,env(safe-area-inset-bottom))}
+ .bnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:16;background:rgba(20,10,31,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px 4px max(8px,env(safe-area-inset-bottom))}
  .bnav a{position:relative;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;color:var(--muted);text-decoration:none;font-size:12px;font-weight:600;min-height:52px}
  .bnav svg{width:25px;height:25px}
  .bnav a[aria-current=page]{color:var(--pink)}.bnav a[aria-current=page] svg{filter:drop-shadow(0 0 6px var(--pink))}
@@ -378,6 +397,175 @@ body{padding-bottom:90px}
 @media(max-width:900px){.cols,.aide{grid-template-columns:minmax(0,1fr)}.sess-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){#toasts{bottom:96px}.fab{left:16px;right:16px;justify-content:center}.srow>.lbl{width:100%}.msg{max-width:94%}.ask{flex-wrap:wrap}.ask .btn{flex:1}.hero{grid-template-columns:minmax(0,1fr)}.me{justify-self:start}.tools .btn,.tools select{width:100%;flex:1 1 100%}.seg{width:100%}.seg button{flex:1}h2{font-size:28px}.sess-grid,.row3{grid-template-columns:minmax(0,1fr)}.sess-head .btn{width:100%}.top{min-height:0}}
 @media(prefers-reduced-motion:reduce){.ring .arc,.bar i{transition:none}.pill i{animation:none}}
+
+/* ---------- Recherche globale ---------- */
+.gsearch{position:relative;max-width:640px}
+.gs-box{display:flex;align-items:center;gap:10px;height:54px;padding:0 7px 0 16px;border-radius:18px;background:rgba(20,10,31,.62);backdrop-filter:blur(12px);border:1px solid rgba(45,226,230,.55);box-shadow:0 0 0 4px rgba(45,226,230,.08),0 10px 30px rgba(0,0,0,.3);font-weight:400;cursor:text}
+.gs-box>svg{flex:none;width:20px;height:20px;color:var(--cyan)}
+.gs-box input{flex:1;min-width:0;height:100%;margin:0;padding:0;background:none;border:0;border-radius:0;outline:none;color:var(--ink);font:500 16px inherit;font-family:inherit;min-height:0}
+.gs-box input::-webkit-search-cancel-button{filter:grayscale(1)}
+.gs-mic{flex:none;width:40px;height:40px;border-radius:12px;border:0;background:var(--cyan);color:var(--dark);display:grid;place-items:center;cursor:pointer}
+.gs-mic svg{width:18px;height:18px}.gs-mic.on{background:var(--pink);animation:micpulse 1.2s infinite}
+.gs-mic[hidden]{display:none}
+.gs-res{position:fixed;z-index:40;background:var(--card2);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.5);overflow:auto;overscroll-behavior:contain;padding:8px}
+.gs-res[hidden]{display:none}
+.gs-sec{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:10px 10px 6px}
+.gs-it{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px;border:0;border-radius:14px;background:none;color:var(--ink);font:inherit;cursor:pointer;min-height:52px}
+.gs-it:hover,.gs-it[aria-selected=true]{background:var(--soft)}
+.gs-it .gs-ic{flex:none;width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:color-mix(in srgb,var(--c) 18%,transparent);color:var(--c)}
+.gs-it .gs-ic svg{width:20px;height:20px}
+.gs-it .gs-t{flex:1;min-width:0}.gs-it .gs-t b{display:block;font-weight:700;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gs-it .gs-t small{display:block;color:var(--muted);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gs-it mark{background:color-mix(in srgb,var(--pink) 30%,transparent);color:inherit;border-radius:4px;padding:0 1px}
+.gs-code{flex:none;font:700 13px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.06em;color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,transparent);border:1px solid color-mix(in srgb,var(--gold) 45%,transparent);border-radius:8px;padding:4px 7px}
+.gs-chips{display:flex;flex-wrap:wrap;gap:8px;padding:4px 10px 10px}
+.gs-chips button{min-height:38px;padding:6px 14px;border-radius:99px;border:1px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-size:14px;cursor:pointer}
+.gs-empty{padding:16px 12px;color:var(--muted)}
+.gs-all{display:block;width:100%;text-align:center;padding:12px;border:0;border-top:1px solid var(--line);background:none;color:var(--cyan);font:700 15px inherit;font-family:inherit;cursor:pointer;margin-top:6px}
+.top .gsearch{margin-top:-6px}
+@media(max-width:760px){.top .gsearch{margin-top:0;max-width:none}.gs-box{height:52px}}
+
+/* ---------- Choix du style ---------- */
+.skinpick{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:10px 0 4px}
+.skinopt{display:flex;flex-direction:column;gap:8px;padding:8px 8px 10px;border-radius:16px;border:2px solid var(--line);background:var(--soft);color:var(--ink);font:inherit;font-weight:700;font-size:14px;cursor:pointer;text-align:center}
+.skinopt[aria-pressed=true]{border-color:var(--pink);box-shadow:0 0 0 2px color-mix(in srgb,var(--pink) 35%,transparent)}
+.skinopt .sk{height:74px;border-radius:10px;position:relative;overflow:hidden}
+.skinopt .sk i{position:absolute;left:8px;right:8px;height:12px;border-radius:4px}
+.sk-neon{background:radial-gradient(120% 90% at 90% 0%,#5a1f5e,#1d0d2c 55%,#0d0716)}.sk-neon i:nth-child(1){top:10px;background:#ff4fa3;box-shadow:0 0 10px #ff4fa3;right:40%}.sk-neon i:nth-child(2){top:30px;background:rgba(255,255,255,.12);border:1px solid #2de2e6}.sk-neon i:nth-child(3){top:50px;background:rgba(255,255,255,.08)}
+.sk-miami{background:linear-gradient(180deg,#ffd1e3,#fff4ec)}.sk-miami i{border:2px solid #1d1330;box-shadow:2px 2px 0 #1d1330}.sk-miami i:nth-child(1){top:9px;background:#e2336b;right:40%}.sk-miami i:nth-child(2){top:29px;background:#fff}.sk-miami i:nth-child(3){top:49px;background:#00a6a6}
+.sk-mission{background:#0a0c10;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:12px 12px}.sk-mission i{border-radius:2px}.sk-mission i:nth-child(1){top:10px;background:#ff7a3d;right:45%}.sk-mission i:nth-child(2){top:30px;background:#11151c;border:1px solid #2a3140}.sk-mission i:nth-child(3){top:50px;background:#3ee6b0;right:60%}
+#skinCard{margin:0 0 16px;border-radius:18px;padding:12px 14px;background:var(--card);border:1px solid color-mix(in srgb,var(--pink) 55%,transparent);display:flex;gap:12px;align-items:center}
+#skinCard[hidden]{display:none}#skinCard .inst-t{flex:1;min-width:0}#skinCard .inst-t b{display:block}#skinCard p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+#skinCard .ann-x{background:none;border:0;box-shadow:none;color:var(--muted);font-size:24px;line-height:1;padding:2px 6px;min-height:0;cursor:pointer}
+#skinCard .skdots{display:flex;gap:4px;flex:none}#skinCard .skdots span{width:16px;height:40px;border-radius:6px}
+
+/* =====================================================================
+   STYLE « MIAMI SOLEIL » : jour, pastel, cartes autocollants
+   ===================================================================== */
+:root[data-skin=miami]{color-scheme:light;--bg:#fff4ec;--ink:#1d1330;--card:#ffffff;--card2:#ffffff;--line:rgba(29,19,48,.16);--muted:#5b4a6b;--soft:rgba(29,19,48,.06);
+--pink:#e2336b;--cyan:#008c8c;--sun:#ff8a3d;--gold:#9a6200;--dark:#1d1330;--live:#008c8c;--coral:#e2336b;--teal:#008c8c;--k:#1d1330}
+[data-skin=miami] body{background-image:linear-gradient(180deg,#ffd9e8 0,#ffe7d6 420px,#fff4ec 900px);background-attachment:scroll}
+[data-skin=miami] h2{text-transform:uppercase;letter-spacing:.01em}
+[data-skin=miami] .top{background:linear-gradient(180deg,#ffc1d9 0%,#ffd6c2 70%,#ffe7d6 100%)}
+[data-skin=miami] .scene{display:none}
+[data-skin=miami] .top::before{content:"";position:absolute;right:max(5vw,16px);top:22%;width:clamp(120px,22vw,240px);aspect-ratio:1;border-radius:50%;background:linear-gradient(180deg,#ffd447 0 54%,transparent 54% 58%,#ffb547 58% 67%,transparent 67% 70%,#ff9a52 70% 78%,transparent 78% 81%,#ff7f6a 81%);opacity:.9;z-index:0;pointer-events:none}
+[data-skin=miami] .brand h1{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:800;text-transform:uppercase;color:#1d1330;text-shadow:4px 4px 0 #ff9ec2;transform:none;letter-spacing:.01em}
+[data-skin=miami] .brand p{color:#3a2a4d;text-shadow:none}
+[data-skin=miami] .me{background:#fff;border:2px solid #1d1330;box-shadow:4px 4px 0 #1d1330;backdrop-filter:none}
+[data-skin=miami] .ring .bg{stroke:rgba(29,19,48,.12)}[data-skin=miami] .ring .arc{filter:none}
+[data-skin=miami] .tabs a{color:#1d1330;background:rgba(255,255,255,.6);backdrop-filter:none}
+[data-skin=miami] .tabs a[aria-current=page]{background:var(--bg);color:#c2185b;box-shadow:inset 0 3px 0 #e2336b}
+[data-skin=miami] .tabs a:not([aria-current]):hover{background:#fff}
+[data-skin=miami] .gs-box{background:#fff;border:2px solid #1d1330;box-shadow:4px 4px 0 #1d1330;backdrop-filter:none}
+[data-skin=miami] .gs-box>svg{color:#1d1330}
+[data-skin=miami] .gs-mic{background:#ffcf3f;color:#1d1330;border:2px solid #1d1330}
+[data-skin=miami] .gs-res{border:2px solid #1d1330;box-shadow:5px 5px 0 #1d1330}
+[data-skin=miami] .card,[data-skin=miami] .panel,[data-skin=miami] .pl,[data-skin=miami] .pcard,[data-skin=miami] .stats div,[data-skin=miami] .adm-row,[data-skin=miami] .adm-stat,[data-skin=miami] #installCard,[data-skin=miami] #skinCard{border:2px solid #1d1330;box-shadow:4px 4px 0 #1d1330;backdrop-filter:none}
+[data-skin=miami] .card:hover{border-color:#1d1330;transform:translate(-1px,-1px);box-shadow:5px 5px 0 #1d1330}
+[data-skin=miami] .pl.playing{box-shadow:4px 4px 0 #008c8c;border-color:#008c8c}
+[data-skin=miami] .sheet,[data-skin=miami] #mapPop{border:2px solid #1d1330;box-shadow:6px 6px 0 #1d1330}
+[data-skin=miami] .btn{background:#e2336b;color:#fff;border:2px solid #1d1330;box-shadow:3px 3px 0 #1d1330}
+[data-skin=miami] .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1d1330}
+[data-skin=miami] .btn.ghost{background:#fff;color:#1d1330;border:2px solid #1d1330;box-shadow:2px 2px 0 #1d1330}
+[data-skin=miami] .btn.on,[data-skin=miami] .btn.found.on,[data-skin=miami] .btn.go{background:#00a6a6;color:#fff;border-color:#1d1330}
+[data-skin=miami] .btn.stop{background:#ffcf3f;color:#1d1330}
+[data-skin=miami] .fab{background:#e2336b;color:#fff;border:2px solid #1d1330;box-shadow:4px 4px 0 #1d1330}
+[data-skin=miami] .link.danger,[data-skin=miami] .pill.on,[data-skin=miami] .warnm{color:#b0124f}
+[data-skin=miami] .tag{color:color-mix(in srgb,var(--c) 55%,#1d1330);background:color-mix(in srgb,var(--c) 22%,#fff);border-color:color-mix(in srgb,var(--c) 60%,#1d1330)}
+[data-skin=miami] input,[data-skin=miami] select,[data-skin=miami] textarea{background:#fff;border:1.5px solid rgba(29,19,48,.35)}
+[data-skin=miami] input::placeholder,[data-skin=miami] textarea::placeholder{color:#7a6a88}
+[data-skin=miami] .chip{background:#fff;border:1.5px solid rgba(29,19,48,.3)}
+[data-skin=miami] .chip:hover{border-color:#1d1330}
+[data-skin=miami] .chip[aria-pressed=true],[data-skin=miami] .subnav a[aria-current=page],[data-skin=miami] .adm-tabs button[aria-selected=true]{background:#1d1330;color:#fff;border-color:#1d1330}
+[data-skin=miami] .chapchip[aria-pressed=true],[data-skin=miami] .zonechips .chip[aria-pressed=true],[data-skin=miami] .seg button[aria-pressed=true]{background:#00a6a6;color:#fff;border-color:#1d1330;box-shadow:2px 2px 0 #1d1330}
+[data-skin=miami] .chip i,[data-skin=miami] .bar i,[data-skin=miami] .pill i,[data-skin=miami] .cat svg,[data-skin=miami] .like.on svg{box-shadow:none;filter:none}
+[data-skin=miami] .empty,[data-skin=miami] .ptile{border-color:rgba(29,19,48,.3)}
+[data-skin=miami] .bar,[data-skin=miami] .mbar,[data-skin=miami] .cat .cbar,[data-skin=miami] .chap i,[data-skin=miami] .adm-bar{background:rgba(29,19,48,.1)}
+[data-skin=miami] .chap i.y{box-shadow:none}
+[data-skin=miami] .msg.bot-m{background:#fff;border-color:rgba(29,19,48,.2)}
+[data-skin=miami] .msg.me-m{color:#fff}
+[data-skin=miami] .chat-head{background:linear-gradient(100deg,#e2336b,#ff8a3d)}
+[data-skin=miami] .step,[data-skin=miami] .club-msgs{background:rgba(29,19,48,.04)}
+[data-skin=miami] .wherebox{background:linear-gradient(135deg,#d8f5f2,#fff 60%,#ffe3ee);border:2px solid #1d1330}
+[data-skin=miami] .cat{background:linear-gradient(160deg,color-mix(in srgb,var(--c) 30%,#fff),#fff);border:2px solid #1d1330;box-shadow:3px 3px 0 #1d1330}
+[data-skin=miami] .cat[aria-pressed=true]{box-shadow:0 0 0 3px var(--c),3px 3px 0 #1d1330}
+[data-skin=miami] .cat svg{color:color-mix(in srgb,var(--c) 60%,#1d1330)}
+[data-skin=miami] .code{background:#fff6d6;border:1.5px solid #c98d00;color:#7a4d00}
+[data-skin=miami] .cost{background:#e5f7e8;color:#1f6b33;border-color:#4caf6a}
+[data-skin=miami] .warnb{background:#fff1d6;color:#8a5200;border-color:#e0a030}
+[data-skin=miami] .badge{background:#fff1c9;color:#7a4d00;border-color:#d9a400}
+[data-skin=miami] .stats div b{text-shadow:none}
+[data-skin=miami] .rank:first-child .pos{text-shadow:none}
+[data-skin=miami] .ph figcaption{color:#fff}
+[data-skin=miami] .popx{color:#1d1330}
+[data-skin=miami] .sw[aria-pressed=true]{border-color:#1d1330;box-shadow:inset 0 0 0 3px #fff}
+[data-skin=miami] .avprev{border-color:rgba(29,19,48,.3)}
+[data-skin=miami] .mm-mic{color:#1d1330;background:radial-gradient(circle at 50% 35%,rgba(0,166,166,.22),#fff 70%);border:2px solid #1d1330}
+[data-skin=miami] .homeguide{background:linear-gradient(120deg,#ffe3ee,#fff2e2)}
+[data-skin=miami] .session{background:linear-gradient(135deg,#ffe3ee,#fff2e2 45%,#d8f5f2);border:2px solid #1d1330}
+[data-skin=miami] .toast{border:2px solid #1d1330;box-shadow:4px 4px 0 #1d1330}
+[data-skin=miami] .admb::after{box-shadow:none;border:1.5px solid #1d1330}
+[data-skin=miami] .loggedin{color:#007575}[data-skin=miami] .loggedin i{box-shadow:none}
+@media(max-width:760px){[data-skin=miami] .bnav{background:#fff;border-top:2px solid #1d1330;backdrop-filter:none}[data-skin=miami] .bnav a[aria-current=page]{color:#c2185b}[data-skin=miami] .bnav a[aria-current=page] svg{filter:none}[data-skin=miami] .top::before{top:12px;width:110px;right:16px;opacity:.5}}
+
+/* =====================================================================
+   STYLE « MODE MISSION » : écran tactique, net et sobre
+   ===================================================================== */
+:root[data-skin=mission]{--bg:#0a0c10;--ink:#eef1f5;--card:#11151c;--card2:#141922;--line:#2a3140;--muted:#8b95a7;--soft:rgba(255,255,255,.04);
+--pink:#ff7a3d;--cyan:#3ee6b0;--sun:#ffb13d;--gold:#ffcf5a;--dark:#0a0c10;--live:#3ee6b0;--coral:#ff7a3d;--teal:#3ee6b0}
+[data-skin=mission] body{font-family:"Space Grotesk",system-ui,sans-serif;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:28px 28px;background-attachment:fixed}
+[data-skin=mission] h1,[data-skin=mission] h2,[data-skin=mission] h3{font-family:"Space Grotesk",system-ui,sans-serif;font-weight:700;letter-spacing:.01em}
+[data-skin=mission] h2{font-size:28px;text-transform:uppercase;letter-spacing:.06em}[data-skin=mission] h3{font-size:20px}
+[data-skin=mission] .top{background:#0a0c10;border-bottom:1px solid #2a3140;background-image:linear-gradient(rgba(255,122,61,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,122,61,.06) 1px,transparent 1px);background-size:28px 28px}
+[data-skin=mission] .scene{display:none}
+[data-skin=mission] .brand h1{font-family:"Space Grotesk",system-ui,sans-serif;font-weight:700;font-size:clamp(34px,5vw,56px);text-transform:uppercase;letter-spacing:.14em;color:#eef1f5;text-shadow:none;transform:none;display:flex;align-items:center;gap:14px}
+[data-skin=mission] .brand h1::before{content:"";flex:none;width:.5em;height:.5em;border:3px solid #ff7a3d;transform:rotate(45deg);box-shadow:inset 0 0 0 .12em #0a0c10,inset 0 0 0 1em #ff7a3d}
+[data-skin=mission] .brand p{color:#8b95a7;text-shadow:none;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:14px}
+[data-skin=mission] .me{background:#11151c;border:1px solid #2a3140;border-radius:8px;backdrop-filter:none}
+[data-skin=mission] .ring .arc{filter:none;stroke:#ff7a3d}[data-skin=mission] .ring b{font-family:"JetBrains Mono",monospace;font-size:18px}
+[data-skin=mission] .tabs a{border-radius:6px 6px 0 0;color:#8b95a7;background:transparent;backdrop-filter:none;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.08em;font-size:14px}
+[data-skin=mission] .tabs a[aria-current=page]{background:#11151c;color:#ff7a3d;box-shadow:inset 0 2px 0 #ff7a3d}
+[data-skin=mission] .tabs a:not([aria-current]):hover{background:#11151c;color:#eef1f5}
+[data-skin=mission] .gs-box{background:#11151c;border:1px solid #2a3140;border-radius:8px;box-shadow:none;backdrop-filter:none}
+[data-skin=mission] .gs-box:focus-within{border-color:#ff7a3d}
+[data-skin=mission] .gs-box>svg{color:#ff7a3d}[data-skin=mission] .gs-box input{font-family:"JetBrains Mono",monospace;font-size:15px}
+[data-skin=mission] .gs-mic{border-radius:6px;background:#1a202a;color:#eef1f5;border:1px solid #2a3140}
+[data-skin=mission] .gs-res{border-radius:8px}[data-skin=mission] .gs-it{border-radius:6px}[data-skin=mission] .gs-it .gs-ic{border-radius:6px}
+[data-skin=mission] .gs-sec,[data-skin=mission] .pos,[data-skin=mission] .code,[data-skin=mission] .gs-code,[data-skin=mission] .mini,[data-skin=mission] .pill,[data-skin=mission] .tag,[data-skin=mission] .cost,[data-skin=mission] .warnm,[data-skin=mission] .warnb,[data-skin=mission] .ok{font-family:"JetBrains Mono",ui-monospace,monospace}
+[data-skin=mission] .card,[data-skin=mission] .panel,[data-skin=mission] .pl,[data-skin=mission] .pcard,[data-skin=mission] .sheet,[data-skin=mission] .empty,[data-skin=mission] .mapbox,[data-skin=mission] #mapPop,[data-skin=mission] .stats div,[data-skin=mission] .cat,[data-skin=mission] .adm-row,[data-skin=mission] .adm-stat,[data-skin=mission] #installCard,[data-skin=mission] #skinCard,[data-skin=mission] #annBar,[data-skin=mission] .toast,[data-skin=mission] .mm-live,[data-skin=mission] .mm-mic,[data-skin=mission] .mm-big{border-radius:8px;backdrop-filter:none}
+[data-skin=mission] .sheet,[data-skin=mission] #mapPop,[data-skin=mission] .toast{box-shadow:0 20px 50px rgba(0,0,0,.6);border-color:#2a3140}
+[data-skin=mission] .btn{border-radius:6px;background:#ff7a3d;color:#0a0c10;box-shadow:none;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.06em;font-size:14px}
+[data-skin=mission] .btn.ghost{background:transparent;color:#eef1f5;border:1px solid #2a3140}
+[data-skin=mission] .btn.on,[data-skin=mission] .btn.found.on,[data-skin=mission] .btn.go{background:#3ee6b0;color:#0a0c10;box-shadow:none}
+[data-skin=mission] .fab{border-radius:8px;background:#ff7a3d;box-shadow:0 10px 30px rgba(0,0,0,.5);font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.06em;font-size:15px}
+[data-skin=mission] .chip,[data-skin=mission] .pill,[data-skin=mission] .tag,[data-skin=mission] .mini,[data-skin=mission] .cost,[data-skin=mission] .warnm,[data-skin=mission] .warnb,[data-skin=mission] .badge,[data-skin=mission] .like,[data-skin=mission] .gs-chips button,[data-skin=mission] .adm-tabs button{border-radius:6px}
+[data-skin=mission] input,[data-skin=mission] select,[data-skin=mission] textarea,[data-skin=mission] .seg,[data-skin=mission] .subnav,[data-skin=mission] details.how,[data-skin=mission] dl.facts,[data-skin=mission] .code,[data-skin=mission] .step,[data-skin=mission] .ptile,[data-skin=mission] .clubcard,[data-skin=mission] .skinopt{border-radius:6px}
+[data-skin=mission] input,[data-skin=mission] select,[data-skin=mission] textarea{background:#0e1218;border-color:#2a3140}
+[data-skin=mission] .subnav a{border-radius:4px;font-family:"JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.06em;font-size:13px}
+[data-skin=mission] .subnav a[aria-current=page],[data-skin=mission] .chip[aria-pressed=true],[data-skin=mission] .adm-tabs button[aria-selected=true]{background:#eef1f5;color:#0a0c10}
+[data-skin=mission] .chapchip[aria-pressed=true],[data-skin=mission] .zonechips .chip[aria-pressed=true]{background:#ff7a3d;border-color:#ff7a3d;color:#0a0c10;box-shadow:none}
+[data-skin=mission] .chip i,[data-skin=mission] .bar i,[data-skin=mission] .cat svg,[data-skin=mission] .like.on svg,[data-skin=mission] .pill i,[data-skin=mission] .chap i.y,[data-skin=mission] .ring .arc{box-shadow:none;filter:none}
+[data-skin=mission] .bar,[data-skin=mission] .mbar,[data-skin=mission] .cat .cbar,[data-skin=mission] .chap i{border-radius:2px}
+[data-skin=mission] .chap i.y{background:#ff7a3d}
+[data-skin=mission] .cat{background:#11151c;border-color:#2a3140}
+[data-skin=mission] .cat b{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:18px}
+[data-skin=mission] .cat[aria-pressed=true]{border-color:var(--c);box-shadow:inset 0 -3px 0 var(--c)}
+[data-skin=mission] .wherebox{background:#11151c;border-color:#2a3140;box-shadow:inset 3px 0 0 #ff7a3d}
+[data-skin=mission] .session,[data-skin=mission] .homeguide{background:#11151c;border-color:#2a3140;box-shadow:inset 3px 0 0 #ff7a3d}
+[data-skin=mission] .pl.playing{box-shadow:inset 3px 0 0 #3ee6b0;border-color:#2a6e5c}
+[data-skin=mission] .chat-head{background:#141922;border-bottom:1px solid #2a3140}
+[data-skin=mission] .msg{border-radius:8px}[data-skin=mission] .msg.me-m{background:#ff7a3d}
+[data-skin=mission] .stats div b,[data-skin=mission] .rank:first-child .pos{text-shadow:none;font-family:"JetBrains Mono",monospace}
+[data-skin=mission] .stats div b{color:#ff7a3d}
+[data-skin=mission] .micbtn{background:#ff7a3d;box-shadow:none}
+[data-skin=mission] .av{border-radius:6px}[data-skin=mission] .cbadge{border-radius:6px;box-shadow:none}
+[data-skin=mission] .tabs .cnt{border-radius:4px}
+[data-skin=mission] .admb::after{border-radius:3px;box-shadow:none;background:#ff7a3d}
+[data-skin=mission] .mm-big{font-family:"JetBrains Mono",monospace;text-transform:uppercase}
+@media(max-width:760px){[data-skin=mission] .bnav{background:#0a0c10;border-top:1px solid #2a3140;backdrop-filter:none}[data-skin=mission] .bnav a{font-family:"JetBrains Mono",monospace;text-transform:uppercase;font-size:10px;letter-spacing:.05em}[data-skin=mission] .bnav a[aria-current=page]{color:#ff7a3d}[data-skin=mission] .bnav a[aria-current=page] svg{filter:none}[data-skin=mission] .brand h1{font-size:26px;letter-spacing:.12em}}
+[data-skin] .gs-box input{background:none;border:0;box-shadow:none;border-radius:0;min-height:0}
+[data-skin=miami] .brand h1{font-size:clamp(40px,7vw,88px)}
+[data-skin=mission] .gs-box input{font-size:14px}
 </style>
 </head>
 <body>
@@ -412,6 +600,9 @@ body{padding-bottom:90px}
         <div><span class="nm"><span id="meAv"></span><span id="meName">Invité</span><i class="admb" id="meAdm" hidden title="Admin de la Planque"></i></span><small id="meSub">Chargement…</small><span class="loggedin" id="meLog" hidden><i></i>Connecté</span></div>
       </a>
     </div>
+    <div class="gsearch" role="search">
+      <label class="gs-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="gsIn" type="search" placeholder="Un secret, un code, un pote…" autocomplete="off" enterkeyhint="search" role="combobox" aria-label="Rechercher dans la Planque" aria-controls="gsRes" aria-expanded="false" aria-autocomplete="list"><button type="button" id="gsMic" class="gs-mic" aria-label="Chercher à la voix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button></label>
+    </div>
     <nav class="tabs" aria-label="Sections"><a href="#accueil" data-main="accueil"><span>Accueil</span></a><a href="#trouver" data-main="trouver"><span>Trouver</span></a><a href="#bande" data-main="bande"><span>Ma bande</span><span class="cnt livecnt" hidden>0</span><span class="dot inboxdot" hidden></span></a><a href="#aide" data-main="aide"><span>Guide</span></a><a href="#admin" data-main="admin" class="admtab" hidden><span>Admin</span></a></nav>
   </div>
 </header>
@@ -422,6 +613,8 @@ body{padding-bottom:90px}
 
   <section id="v-accueil" hidden>
     <div id="annBar" hidden></div>
+    <div id="skinCard" hidden><span class="skdots" aria-hidden="true"><span style="background:#ff4fa3"></span><span style="background:#ffcf3f;border:2px solid #1d1330"></span><span style="background:#ff7a3d"></span></span><div class="inst-t"><b>Nouveau : choisis ton style</b><p>Néon nuit, Miami soleil ou Mode mission.</p></div><div class="inst-a"><button class="btn sm" type="button" data-skincard="go">Choisir</button><button class="ann-x" type="button" data-skincard="later" aria-label="Plus tard">×</button></div></div>
+    <div id="installCard" hidden><img src="icons/icon-192.png" alt="" width="52" height="52"><div class="inst-t"><b>Installe La Planque</b><p>Une icône sur ton écran d'accueil, en plein écran.</p></div><div class="inst-a"><button class="btn sm" type="button" data-inst="go">Installer</button><button class="ann-x" type="button" data-inst="later" aria-label="Plus tard">×</button></div></div>
     <div class="homehead"><div><h2 id="homeHello">Salut !</h2><p id="homeWhere"></p></div><div class="homeacts"><span id="homeSess"></span><button class="btn big go" id="homePlay" data-act="mmplay">Je lance une partie</button></div></div>
     <div class="homegrid">
       <div class="panel"><div class="sess-head" style="margin-bottom:10px"><h2>Ma liste de ce soir</h2><a class="link" href="#manette">Mode manette posée</a></div><div id="homeList"></div></div>
@@ -596,6 +789,8 @@ body{padding-bottom:90px}
       <div class="panel"><h2>Ma progression</h2><p>Par catégorie, sur tous les secrets répertoriés.</p><ol class="board" id="mycats"></ol><h3 style="margin-top:22px">Mes badges</h3><div class="badges" id="mybadges" style="margin-top:10px"></div></div>
       <div class="panel">
         <h2>Mon compte</h2><p id="acctInfo">Ton profil, visible par toute la bande.</p>
+        <div id="skinBox" style="margin:4px 0 22px"><span class="lbl">Style de l'appli</span><span class="src">Change l'ambiance de la Planque, juste pour toi.</span>
+          <div class="skinpick"><button type="button" class="skinopt" data-skin="neon" aria-pressed="false"><span class="sk sk-neon"><i></i><i></i><i></i></span>Néon nuit</button><button type="button" class="skinopt" data-skin="miami" aria-pressed="false"><span class="sk sk-miami"><i></i><i></i><i></i></span>Miami soleil</button><button type="button" class="skinopt" data-skin="mission" aria-pressed="false"><span class="sk sk-mission"><i></i><i></i><i></i></span>Mode mission</button></div></div>
         <form id="profileForm">
     <div class="acct-top"><label class="avpick"><input type="file" accept="image/*" data-photo="pf"><span class="avprev" id="pfPrev">+</span><small id="pfPhotoLbl">Photo (facultatif)</small></label>
       <label style="flex:1">Pseudo<input name="pseudo" id="pfPseudo" required maxlength="24" placeholder="Ex. : Karim_du_port" autocomplete="nickname"></label></div>
@@ -607,6 +802,7 @@ body{padding-bottom:90px}
         </form>
         <h3 style="margin-top:26px">Inviter tes potes</h3>
         <p style="margin-top:6px">Envoie simplement le lien du site à tes potes. Chacun crée son compte avec son e-mail et un mot de passe, choisit son pseudo, et apparaît dans « En direct ». Avec « Se souvenir de moi », il est connecté directement à chaque ouverture.</p>
+        <div id="installBox" hidden style="margin-top:22px"><h3>L'appli sur ton téléphone</h3><p class="src" style="margin:6px 0 10px" id="installTxt">Installe La Planque comme une vraie appli : une icône sur ton écran d'accueil, en plein écran, et plus rapide à ouvrir.</p><button class="btn sm" type="button" data-inst="go">Installer l'appli</button></div>
         <div id="logoutBox" hidden style="margin-top:22px"><h3>Connexion</h3><p class="src" style="margin:6px 0 10px">Connecté avec <b id="logoutMail"></b></p><button class="btn ghost sm" type="button" onclick="PLANQUE.logout()">Se déconnecter</button></div>
         <div id="exportBox" hidden style="margin-top:22px"><h3>Admin</h3><p class="src" style="margin:6px 0 10px">Membres, fiches, modération, annonces, accès, Guide : tout se gère depuis le panneau.</p><a class="btn sm" href="#admin">Ouvrir le panneau admin</a></div>
       </div>
@@ -687,6 +883,14 @@ body{padding-bottom:90px}
 </div>
 
 
+
+<div class="overlay" id="installSheet" hidden data-inst="close">
+  <div class="sheet authsheet" style="text-align:left">
+    <div style="display:flex;gap:14px;align-items:center"><img src="icons/icon-192.png" alt="" width="60" height="60" style="border-radius:14px"><div><h2 style="margin:0">Installer La Planque</h2><p class="authsub" style="margin:2px 0 0!important">Ça prend 10 secondes.</p></div></div>
+    <ol class="inst-steps" id="installSteps"></ol>
+    <div class="actions"><button class="btn" type="button" data-inst="close">J'ai compris</button></div>
+  </div>
+</div>
 <div class="overlay" id="maintGate" hidden style="z-index:70;background:radial-gradient(circle at 30% 10%,rgba(255,79,163,.28),transparent 55%),radial-gradient(circle at 80% 90%,rgba(45,226,230,.22),transparent 55%),#140a1f">
   <div class="sheet authsheet" style="text-align:center;justify-items:center">
     <div class="authbrand">La Planque</div>
@@ -717,7 +921,8 @@ body{padding-bottom:90px}
 </div>
 <div class="overlay" id="lb" hidden data-act="closelb"><img alt="Photo agrandie"></div>
 
-<nav class="bnav" aria-label="Navigation"><a href="#accueil" data-main="accueil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-5v-6h-4v6H5a1 1 0 01-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Accueil</span></a><a href="#trouver" data-main="trouver"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Trouver</span></a><a href="#bande" data-main="bande"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M15 15.2c3 .2 6 1.8 6 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Ma bande</span><span class="cnt livecnt" hidden>0</span><span class="dot inboxdot" hidden></span></a><a href="#aide" data-main="aide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.2" fill="currentColor"/><circle cx="12" cy="10.5" r="1.2" fill="currentColor"/><circle cx="15" cy="10.5" r="1.2" fill="currentColor"/></svg><span>Guide</span></a></nav>
+<nav class="bnav" aria-label="Navigation"><a href="#accueil" data-main="accueil"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9a1 1 0 01-1 1h-5v-6h-4v6H5a1 1 0 01-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span>Accueil</span></a><a href="#trouver" data-main="trouver"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M16 16l5 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span>Trouver</span></a><a href="#bande" data-main="bande"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17" cy="10" r="2.6" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M15 15.2c3 .2 6 1.8 6 4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Ma bande</span><span class="cnt livecnt" hidden>0</span><span class="dot inboxdot" hidden></span></a><a href="#aide" data-main="aide"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="10.5" r="1.2" fill="currentColor"/><circle cx="12" cy="10.5" r="1.2" fill="currentColor"/><circle cx="15" cy="10.5" r="1.2" fill="currentColor"/></svg><span>Guide</span></a><a href="#profil" data-main="profil"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M4 21a8 8 0 0 1 16 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Profil</span></a></nav>
+<div id="gsRes" class="gs-res" role="listbox" aria-label="Résultats" hidden></div>
 <div id="toasts" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -989,9 +1194,9 @@ function renderProfile(){
   if(mine&&!profFilled){profFilled=true;$('#pfPseudo').value=mine.pseudo||'';$('#pfTag').value=mine.gamertag||'';pickColor=mine.color||pickColor;draft={plat:mine.platform||'',fav:mine.fav||'',photo:mine.photo||null,photoBlob:null};swatches()}
 }
 const renderOnboard=()=>{$('#onboard').hidden=!(loaded&&me&&canWrite&&!players[me])};
-function render(){if(mapInit)renderMap();renderGroupTab();renderManette();renderHome();renderNavBadges();renderMe();renderLive();renderSecrets();renderGroup();renderProfile();renderOnboard();renderPosts();$('#fab').hidden=!(loaded&&canWrite&&players[me]);if(window.__admRender)window.__admRender()}
+function render(){if(mapInit)renderMap();renderGroupTab();renderManette();renderHome();renderNavBadges();renderMe();renderLive();renderSecrets();renderGroup();renderProfile();renderOnboard();renderPosts();$('#fab').hidden=!(loaded&&canWrite&&players[me]);if(window.__admRender)window.__admRender();if(window.__uiRender)window.__uiRender()}
 
-const ROUTES={accueil:['accueil','accueil'],trouver:['guide','trouver'],guide:['guide','trouver'],carte:['carte','trouver'],bande:['direct','bande'],direct:['direct','bande'],trouvailles:['trouvailles','bande'],groupe:['groupe','bande'],aide:['aide','aide'],profil:['profil',''],manette:['manette',''],admin:['admin','admin']};
+const ROUTES={accueil:['accueil','accueil'],trouver:['guide','trouver'],guide:['guide','trouver'],carte:['carte','trouver'],bande:['direct','bande'],direct:['direct','bande'],trouvailles:['trouvailles','bande'],groupe:['groupe','bande'],aide:['aide','aide'],profil:['profil','profil'],manette:['manette',''],admin:['admin','admin']};
 const SUBS={trouver:[['trouver','Liste','guide'],['carte','Carte','carte']],bande:[['bande','En direct','direct'],['trouvailles','Trouvailles','trouvailles'],['groupe','Clubs et amis','groupe']]};
 const SECS=['accueil','guide','carte','direct','trouvailles','groupe','aide','profil','manette','admin'];
 function renderNavBadges(){const n=typeof inboxCount==='function'?inboxCount():0;document.querySelectorAll('.inboxdot').forEach(e=>e.hidden=!n)}
@@ -1542,5 +1747,6 @@ window.PLQ={get isOwner(){return isOwner},get players(){return players},get secr
 }
 </script>
 <script src="planque-admin.js"></script>
+<script src="planque-ui.js"></script>
 </body>
 </html>
